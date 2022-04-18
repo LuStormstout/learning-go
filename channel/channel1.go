@@ -4,9 +4,9 @@
 	make(chan Type, capacity)
 
 channel <- value 发送 value 到 channel
-<- channel 接受并将其丢弃
-x := channel 从 channel 中接收数据，并赋值给 x
-x, ok := channel 功能同上，同时检查通道是否已关闭或者是否为空
+<-channel 接受并将其丢弃
+x := <-channel 从 channel 中接收数据，并赋值给 x
+x, ok := <-channel 功能同上，同时检查通道是否已关闭或者是否为空
 */
 package main
 
