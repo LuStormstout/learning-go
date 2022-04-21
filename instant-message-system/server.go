@@ -48,7 +48,7 @@ func (server *Server) ListenMessage() {
 
 // BroadCast 广播消息的方法
 func (server *Server) BroadCast(user *User, msg string) {
-	sendMsg := "[" + user.Addr + "]" + user.Name + ":" + msg
+	sendMsg := "[广播消息]：[" + user.Addr + "]" + user.Name + ":" + msg
 
 	server.Message <- sendMsg
 }
@@ -102,7 +102,7 @@ func (server *Server) Handler(conn net.Conn) {
 		case <-time.After(time.Second * 1800): // 为了测试的话可以将这个时间修改的短一点儿，目前是 30 分钟后就会被踢下线
 			// 已经超时
 			// 将当前的 User 强制关闭（超时不活跃踢下线）
-			user.SendMsg("由于你长时间处于不活跃状态，你已被踢下线。")
+			user.SendMsg("[系统消息]：由于你长时间处于不活跃状态，你已被踢下线。")
 
 			// 销毁该用户的资源（关闭该用户的 channel）
 			close(user.C)
