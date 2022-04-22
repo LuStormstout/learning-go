@@ -11,6 +11,7 @@ type Client struct {
 	ServerPort int
 	Name       string
 	conn       net.Conn
+	modeFlag   int // 当前客户端被选择的模式（模式标志）
 }
 
 func NewClient(serverIp string, serverPort int) *Client {
@@ -18,6 +19,7 @@ func NewClient(serverIp string, serverPort int) *Client {
 	client := &Client{
 		ServerIp:   serverIp,
 		ServerPort: serverPort,
+		modeFlag:   999, // 给一个默认值，不然为 0 的话菜单就退出了
 	}
 
 	// 连接 server
@@ -30,6 +32,48 @@ func NewClient(serverIp string, serverPort int) *Client {
 
 	// 返回对象
 	return client
+}
+
+func (client *Client) menu() bool {
+	var modeFlag int
+
+	fmt.Println("1.广播模式")
+	fmt.Println("2.私聊模式")
+	fmt.Println("3.更新用户名")
+	fmt.Println("0.退出")
+	fmt.Scanln(&modeFlag)
+
+	if modeFlag >= 0 && modeFlag <= 3 {
+		client.modeFlag = modeFlag
+		return true
+	} else {
+		fmt.Println(">>> 请正确输入菜单列表中的序号 <<<")
+		return false
+	}
+}
+
+func (client *Client) Run() {
+	for client.modeFlag != 0 {
+		for client.menu() != true {
+
+		}
+
+		// 根据选择的模式处理不同的业务
+		switch client.modeFlag {
+		case 1:
+			// 广播模式
+			fmt.Println("广播模式选择...")
+			break
+		case 2:
+			// 私聊模式
+			fmt.Println("私聊模式选择...")
+			break
+		case 3:
+			// 更新用户名
+			fmt.Println("更新用户名选择...")
+			break
+		}
+	}
 }
 
 var serverIp string
@@ -53,5 +97,5 @@ func main() {
 	fmt.Println(">>> 服务器连接成功...")
 
 	// 启动客户端业务
-	select {}
+	client.Run()
 }
