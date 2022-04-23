@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"net"
+	"os"
 )
 
 type Client struct {
@@ -34,6 +36,12 @@ func NewClient(serverIp string, serverPort int) *Client {
 	return client
 }
 
+// DealResponse 处理 server 回应的消息，直接现实到标准输出即可
+func (client *Client) DealResponse() {
+	// 一旦 client.conn 有数据，就直接 copy 到 stdout 标准输出上，永久阻塞监听
+	io.Copy(os.Stdout, client.conn)
+}
+
 func (client *Client) menu() bool {
 	var modeFlag int
 
@@ -50,6 +58,19 @@ func (client *Client) menu() bool {
 		fmt.Println(">>> 请正确输入菜单列表中的序号 <<<")
 		return false
 	}
+}
+
+func (client *Client) UpdateName() bool {
+	fmt.Println(">>> 请输入用户名：")
+	fmt.Scanln(&client.Name)
+
+	sendMsg := "rename|" + client.Name + "\n"
+	_, err := client.conn.Write([]byte(sendMsg))
+	if err != nil {
+		fmt.Println("conn.Write error:", err)
+		return false
+	}
+	return true
 }
 
 func (client *Client) Run() {
@@ -70,7 +91,7 @@ func (client *Client) Run() {
 			break
 		case 3:
 			// 更新用户名
-			fmt.Println("更新用户名选择...")
+			client.UpdateName()
 			break
 		}
 	}
@@ -94,6 +115,10 @@ func main() {
 		fmt.Println(">>> 服务器连接失败...")
 		return
 	}
+
+	// 单独开启一个 goroutine 去处理 server 的回执消息
+	go client.DealResponse()
+
 	fmt.Println(">>> 服务器连接成功...")
 
 	// 启动客户端业务
