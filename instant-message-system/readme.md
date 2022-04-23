@@ -4,8 +4,10 @@
 
 #### build
 
+- `cd 到你的项目路径`
 - 服务端 `go build -o server main.go server.go user.go`
 - 客户端 `go build -o client client.go`
+- 得到一个 server 文件和一个 client 文件
 
 #### run
 
