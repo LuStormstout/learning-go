@@ -7,34 +7,41 @@ import (
 	"strings"
 )
 
+// homeHandler 首页
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>👋 Hello, this is a blogging practice project built in Go.</h1>")
 }
 
+// aboutHandler 关于页
 func aboutHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "此博客是用以记录编程笔记，如你有反馈或建议，请联系"+
 		"<a href=\"mailto:lustormstout@gmail.com\">lustormstout@gmail.com</a>")
 }
 
+// notFoundHandler 自定义 404 页面
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>请求页面未找到 🙁 </h1>"+
 		"如有疑惑，请联系我们。")
 }
 
+// articlesShowHandler 获取文章详情
 func articlesShowHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	fmt.Fprint(w, "文章 ID："+id)
 }
 
+// articlesIndexHandler 访问文章列表
 func articlesIndexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "访问文章列表。")
 }
 
+// articlesStoreHandler 创建新的文章
 func articlesStoreHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "创建新的文章。")
 }
 
+// forceHTMLMiddleware 中间件：设置响应头中的
 func forceHTMLMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// 设置标头
@@ -44,6 +51,7 @@ func forceHTMLMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// removeTrailingSlash 处理请求 URL 后面的斜杠"/"
 func removeTrailingSlash(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// 除首页以外，移除所有请求后面的斜杠"/"
