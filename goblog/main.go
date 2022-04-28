@@ -41,7 +41,7 @@ func articlesStoreHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "创建新的文章。")
 }
 
-// forceHTMLMiddleware 中间件：设置响应头中的
+// forceHTMLMiddleware 中间件：设置响应头
 func forceHTMLMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// 设置标头
