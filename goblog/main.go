@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var router = mux.NewRouter()
+
 // homeHandler 首页
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>👋 Hello, this is a blogging practice project built in Go.</h1>")
@@ -64,11 +66,33 @@ func removeTrailingSlash(next http.Handler) http.Handler {
 }
 
 func articlesCreateHandle(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "创建文章。")
+	html := `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建文章 - 我的博客</title>
+</head>
+<body>
+<form action="%s" method="post">
+    <p>
+        <input type="text" name="title">
+    </p>
+    <p>
+        <textarea name="body" id="body" cols="30" rows="10"></textarea>
+    </p>
+    <p>
+        <button type="submit">提交</button>
+    </p>
+</form>
+</body>
+</html>
+`
+	storeURL, _ := router.Get("articles.store").URL()
+	fmt.Fprintf(w, html, storeURL)
 }
 
 func main() {
-	router := mux.NewRouter()
 	router.HandleFunc("/", homeHandler).Methods("GET").Name("home")
 	router.HandleFunc("/about", aboutHandler).Methods("GET").Name("about")
 
@@ -82,12 +106,6 @@ func main() {
 
 	// 中间件：强制内容类型为 HTML
 	router.Use(forceHTMLMiddleware)
-
-	// 通过命名路由获取 URL 示例
-	homeURL, _ := router.Get("home").URL()
-	fmt.Println("homeURL: ", homeURL)
-	articleURL, _ := router.Get("articles.show").URL("id", "23")
-	fmt.Println("articleURL: ", articleURL)
 
 	http.ListenAndServe(":3000", removeTrailingSlash(router))
 }
