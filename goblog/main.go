@@ -40,7 +40,10 @@ func articlesIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 // articlesStoreHandler 创建新的文章
 func articlesStoreHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "创建新的文章。")
+	fmt.Fprintf(w, "r.Form 中 title 的值为: %v <br>", r.FormValue("title"))
+	fmt.Fprintf(w, "r.PostForm 中 title 的值为: %v <br>", r.PostFormValue("title"))
+	fmt.Fprintf(w, "r.Form 中 test 的值为: %v <br>", r.FormValue("test"))
+	fmt.Fprintf(w, "r.PostForm 中 test 的值为: %v <br>", r.PostFormValue("test"))
 }
 
 // forceHTMLMiddleware 中间件：设置响应头
@@ -74,7 +77,7 @@ func articlesCreateHandle(w http.ResponseWriter, r *http.Request) {
     <title>创建文章 - 我的博客</title>
 </head>
 <body>
-<form action="%s" method="post">
+<form action="%s?test=data" method="post">
     <p>
         <input type="text" name="title">
     </p>
