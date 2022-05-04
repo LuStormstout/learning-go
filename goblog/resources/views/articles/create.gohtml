@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建文章 - 我的博客</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<form action="{{ .URL }}" method="post">
+    <p><label><input type="text" name="title" value="{{ .Title }}"></label></p>
+    {{ with .Errors.title }}
+        <p class="error">{{ . }}</p>
+    {{ end }}
+    <p><label for="body"></label><textarea name="body" id="body" cols="30" rows="10">{{ .Body }}</textarea></p>
+    {{ with .Errors.body }}
+        <p class="error">{{ . }}</p>
+    {{ end }}
+    <p>
+        <button type="submit">提交</button>
+    </p>
+</form>
+</body>
+</html>
