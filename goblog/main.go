@@ -75,6 +75,16 @@ type Article struct {
 	ID          int64
 }
 
+// Link 方法用来生成文章链接
+func (a Article) Link() string {
+	showURL, err := router.Get("articles.show").URL("id", strconv.FormatInt(a.ID, 10))
+	if err != nil {
+		checkError(err)
+		return ""
+	}
+	return showURL.String()
+}
+
 // articlesShowHandler 获取文章详情
 func articlesShowHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. 获取 URL 参数
