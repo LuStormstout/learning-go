@@ -65,6 +65,7 @@ func aboutHandler(w http.ResponseWriter, r *http.Request) {
 
 // notFoundHandler 自定义 404 页面
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
 	fmt.Fprint(w, "<h1>请求页面未找到 🙁 </h1>"+
 		"如有疑惑，请联系我们。")
 }
