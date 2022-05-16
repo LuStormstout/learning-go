@@ -2,7 +2,9 @@ package article
 
 import (
 	"goblog/pkg/model"
+	"goblog/pkg/route"
 	"goblog/pkg/types"
+	"strconv"
 )
 
 // Article 文章模型
@@ -21,4 +23,18 @@ func Get(idStr string) (Article, error) {
 	}
 
 	return article, nil
+}
+
+// GetAll 获取全部文章
+func GetAll() ([]Article, error) {
+	var articles []Article
+	if err := model.DB.Find(&articles).Error; err != nil {
+		return articles, err
+	}
+	return articles, nil
+}
+
+// Link 方法用来生成文章链接
+func (article Article) Link() string {
+	return route.Name2URL("articles.show", "id", strconv.FormatUint(article.ID, 10))
 }
