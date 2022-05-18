@@ -1,6 +1,7 @@
 package article
 
 import (
+	"goblog/pkg/logger"
 	"goblog/pkg/model"
 	"goblog/pkg/route"
 	"goblog/pkg/types"
@@ -37,4 +38,15 @@ func GetAll() ([]Article, error) {
 // Link 方法用来生成文章链接
 func (article Article) Link() string {
 	return route.Name2URL("articles.show", "id", strconv.FormatUint(article.ID, 10))
+}
+
+// Update 更新文章
+func (article *Article) Update() (rowsAffected int64, err error) {
+	result := model.DB.Save(&article)
+	if err = result.Error; err != nil {
+		logger.LogError(err)
+		return 0, err
+	}
+
+	return result.RowsAffected, nil
 }

@@ -1,10 +1,9 @@
 package route
 
 import (
+	"github.com/gorilla/mux"
 	"goblog/pkg/logger"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 var route *mux.Router
