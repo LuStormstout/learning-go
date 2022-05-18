@@ -9,6 +9,8 @@
 <ul>
     {{ range $key, $article := . }}
         <li>
+            {{/*            这里有问题*/}}
+            {{/*            <a href="{{ $article.Link }}">*/}}
             <a href="">
                 <strong>{{ $article.ID }}</strong>:{{ $article.Title }}
             </a>
